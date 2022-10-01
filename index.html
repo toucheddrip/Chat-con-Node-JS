@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  
+    <title>Chat node.js</title>
+</head>
+<body>
+  <div class="container">
+
+    <div class="page-header">
+      <h1>Node.js Chat <small>Desarrollado por la mesa 2</small></h1>
+    </div>
+
+    <div id="content" class="row" style="height: 70%">
+      <div class="col-md-2"></div>
+
+      <div id="chatContent" class="col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            CHAT
+          </div>
+          <div id="chat" class="panel-body"></div>
+        </div>
+
+        <div>
+          <form id="sendMessage" class="input-group" style="text-aling: center; margin: 0 auto;">
+            <input id="message" class="form-control input-lg" type="text">
+            <span class="input-group-btn">
+              <button class="btn btn-lg btn-primary" type="submit">Enviar</button>
+            </span>
+          </form>
+        </div>
+        
+      </div>
+      
+    </div>
+    
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    jquery(function($){
+      var socket = io.connect();
+      var $messageForm = $('#sendMessage');
+      var $message = $('#message');
+      var $chat = $('#chat');
+
+      $messageForm.submit(function(e){
+        e.preventDefault();
+        if($message.val() != '') socket.emit('sendMessage', $message.val());
+        $message.val('');
+      });
+      
+      socket.on('newMessage',function(data){
+        $chat.append(' - '+data.msg+"<br/>");
+      });
+    });
+  </script>
+</body>
+</html>
